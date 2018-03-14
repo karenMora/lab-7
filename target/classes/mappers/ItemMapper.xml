@@ -4,7 +4,69 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="edu.eci.pdsw.sampleprj.dao.mybatis.mappers.ItemMapper">
+    <resultMap type='Item' id='ItemResult'>
+    <id property='id' column="id"></id>t>
+    <result property='nombre' column="nombre"/>
+    <result property='descripcion' column='descripcion'/>  
+    <result property='fechaLanzamiento' column="fechaLanzamiento"></result>
+    <result property='tarifaxDia' column="tarifaxDia"></result>
+    <result property='formatoRenta' column="formatoRenta"></result>
+    <result property='genero;' column="genero;"></result>
+    <association property='tipo' javaType='TipoItem' columnPrefix='TipoItem_'></association>    
+</resultMap
+
+<resultMap type='TipoItem' id='TipoItemResult'>
+        <id property='id' column='id'/>
+        <result property='descripcion' column='descripcion'/>      
+</resultMap>
+
+
+<insert id="insertarItem" parameterType="map" useGeneratedKeys="true">
+    INSERT INTO VI_ITEMS(id,nombre,descripcion,fechalanzamiento,tarifaxdia,formatorenta,genero,TipoItem_id)
+    VALUES (#{item.id},#{item.nombre},#{item.descripcion},#{item.fechaLanzamiento},#{item.tarifaxDia},#{item.formatoRenta},#{item.genero},#{item.tipo})
+</insert>
+
+<select parameterType="map" id="consultarItems" resultMap="ItemResult">
+    select
+    i.id as  Item_id,
+    i.nombre as  Item_nombre,
+        i.descripcion as  Item_descripcion,
+        i.fechalanzamiento as  Item_fechalanzamiento,
+        i.tarifaxdia as Item_tarifaxdia,
+        i.formatorenta as Item_formatorenta,
+        i.genero as Item_genero,        
+        
+        
+        ti.id as TipoItem_id ,
+        ti.descripcion TipoItem_descripcion 
 
     
+        FROM VI_ITEMS as i 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+</select>
+
+<select parameterType="map" id="consultarItem" resultMap="ItemResult">
+        select
     
+      
+    
+        i.id as  Item_id,
+        i.nombre as  Item_nombre,
+        i.descripcion as  Item_descripcion,
+        i.fechalanzamiento as  Item_fechalanzamiento,
+        i.tarifaxdia as Item_tarifaxdia,
+        i.formatorenta as Item_formatorenta,
+        i.genero as Item_genero,        
+        
+        ti.id as TipoItem_id ,
+        ti.descripcion TipoItem_descripcion 
+
+    
+        FROM VI_ITEMS as i 
+        
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+           Where i.id=#{id}
+        
+    </select>
+
 </mapper>

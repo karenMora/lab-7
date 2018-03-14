@@ -15,8 +15,10 @@ import edu.eci.pdsw.samples.services.ServiciosAlquilerFactory;
 public class Main {
 
     public static void main(String a[]) throws ExcepcionServiciosAlquiler{
-        System.out.println(ServiciosAlquilerFactory.getInstance().getServiciosAlquiler().consultarItem(2));
-        System.exit(0);
+        // System.out.println(ServiciosAlquilerFactory.getInstance().getServiciosAlquiler().consultarItem(2));
+       
+       //consultar un cliente
+       System.out.println(ServiciosAlquilerFactory.getInstance().getServiciosAlquiler().consultarCliente(2092788));
     }
     
 }

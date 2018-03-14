@@ -13,6 +13,11 @@ import org.mybatis.guice.XMLMyBatisModule;
 import java.util.Optional;
 
 import static com.google.inject.Guice.createInjector;
+import edu.eci.pdsw.sampleprj.dao.ClienteDAO;
+import edu.eci.pdsw.sampleprj.dao.ItemDAO;
+import edu.eci.pdsw.sampleprj.dao.mybatis.MyBATISClienteDao;
+import edu.eci.pdsw.sampleprj.dao.mybatis.MyBATISItemDAO;
+import org.mybatis.guice.datasource.helper.JdbcHelper;
 
 
 /**
@@ -22,45 +27,58 @@ import static com.google.inject.Guice.createInjector;
 public class ServiciosAlquilerFactory {
 
     private static ServiciosAlquilerFactory instance = new ServiciosAlquilerFactory();
-
-    private static Optional<Injector> optInjector;
-
-    private Injector myBatisInjector(String env, String pathResource) {
-        return createInjector(new XMLMyBatisModule() {
-            @Override
-            protected void initialize() {
-                setEnvironmentId(env);
-                setClassPathResource(pathResource);
-                bind(ServiciosAlquiler.class).to(ServiciosAlquilerItemsImpl.class);
-            }
-        });
-    }
-
+    
+    private static Injector injector;
+    
+    private static Injector testInjector;
+    
     private ServiciosAlquilerFactory(){
-        optInjector = Optional.empty();
+        
+        injector = createInjector(new XMLMyBatisModule() {
+
+                    @Override
+                    protected void initialize() {
+                        install(JdbcHelper.MySQL);                        
+                        setClassPathResource("mybatis-config.xml");                        
+                        bind(ServiciosAlquiler.class).to(ServiciosAlquilerItemsImpl.class);
+                        bind(ItemDAO.class).to(MyBATISItemDAO.class);
+                        bind(ClienteDAO.class).to(MyBATISClienteDao.class);
+                    }
+
+                }
+                
+        );
+
+        testInjector = createInjector(new XMLMyBatisModule() {
+
+                    @Override
+                    protected void initialize() {
+                        install(JdbcHelper.MySQL);                        
+                        setClassPathResource("mybatis-config-h2.xml");                        
+                        bind(ServiciosAlquiler.class).to(ServiciosAlquilerItemsImpl.class);
+                        bind(ItemDAO.class).to(MyBATISItemDAO.class);
+                        bind(ClienteDAO.class).to(MyBATISClienteDao.class);
+                    }
+
+                }
+                
+        );
+
+        
     }
 
     public ServiciosAlquiler getServiciosAlquiler(){
-        if (!optInjector.isPresent()) {
-            optInjector = Optional.of(myBatisInjector("development","mybatis-config.xml"));
-        }
-
-        return optInjector.get().getInstance(ServiciosAlquiler.class);
+        return injector.getInstance(ServiciosAlquiler.class);   
     }
 
 
     public ServiciosAlquiler getServiciosAlquilerTesting(){
-        if (!optInjector.isPresent()) {
-            optInjector = Optional.of(myBatisInjector("test","mybatis-config-h2.xml"));
-        }
-
-        return optInjector.get().getInstance(ServiciosAlquiler.class);
+        return testInjector.getInstance(ServiciosAlquiler.class);   
     }
 
 
-
+    
     public static ServiciosAlquilerFactory getInstance(){
         return instance;
     }
-
 }

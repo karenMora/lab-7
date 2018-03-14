@@ -24,7 +24,7 @@ import static org.quicktheories.generators.SourceDSL.*;
  */
 
 public class ServiciosAlquilerTest {
-
+/*
     @Inject
     private SqlSession sqlSession;
 
@@ -52,5 +52,5 @@ public class ServiciosAlquilerTest {
              return r;
         });
     }
-
+*/
 }

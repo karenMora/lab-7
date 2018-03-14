@@ -3,14 +3,13 @@ package edu.eci.pdsw.sampleprj.dao.mybatis.mappers;
 import edu.eci.pdsw.samples.entities.Cliente;
 import java.util.Date;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  *
  * @author 2106913
  */
 public interface ClienteMapper {
-    
-    public Cliente consultarCliente(int id); 
     
     /**
      * Registrar un nuevo item rentado asociado al cliente identificado
@@ -29,6 +28,9 @@ public interface ClienteMapper {
      * Consultar todos los clientes
      * @return 
      */
-    public List<Cliente> consultarClientes();
-    
+    public Cliente consultarCliente(@Param("id")int id); 
+    public Cliente getCliente(@Param("id") long id);
+    public void insertarCliente(@Param ("cliente")Cliente c);
+    public void agregarItemrentadoACliente(@Param("id")int i,@Param("documento")int i0, @Param("idi")int i1, @Param("fechainic")Date fechai,@Param("fechafinal") Date fechaf);
+
 }
